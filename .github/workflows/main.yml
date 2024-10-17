@@ -36,7 +36,6 @@ jobs:
         run: |
           sonar-scanner \
           -Dsonar.projectKey=order-lifecycle \
-          -Dsonar.projectName=Order Lifecycle \
           -Dsonar.sources=./ \
           -Dsonar.host.url=$SONAR_HOST_URL \
           -Dsonar.login=$SONAR_TOKEN
