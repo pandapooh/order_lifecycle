@@ -1,6 +1,6 @@
-pydantic==2.7.1
 flask==3.0.3
 flask-cors
+flask_sqlalchemy
 boto3
 bson
 pyjwt
@@ -11,3 +11,5 @@ python-dotenv
 requests
 uuid
 pandas
+pytest 
+pytest-cov

@@ -5,7 +5,6 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request
 from templates.customer import customer
 from templates.order import ord
-from pydantic import BaseModel
 
 app = Flask(__name__)
 

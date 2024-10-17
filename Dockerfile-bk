@@ -1,5 +1,5 @@
 # Base Image 
-FROM python:3.8
+FROM --platform=linux/x86-64  python:3.8
 
 # Working directory inside app
 WORKDIR /app

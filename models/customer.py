@@ -3,7 +3,6 @@ import os
 from datetime import datetime
 from os.path import join, dirname
 from dotenv import load_dotenv
-from pydantic import BaseModel
 from models.dynamodb import Dynamo
 from botocore.exceptions import ClientError
 
@@ -19,7 +18,7 @@ class Customer:
     self.ts = datetime.timestamp(dt)
 
   def get_customer(self) -> str:
-    return "something"
+    return self.customerId
     
   def create_customer(self, data):
     if data is not None:

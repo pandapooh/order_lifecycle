@@ -5,7 +5,6 @@ import pandas as pd
 from datetime import datetime
 from os.path import join, dirname
 from dotenv import load_dotenv
-from pydantic import BaseModel
 
 from botocore.exceptions import ClientError
 from models.dynamodb import Dynamo

@@ -1,0 +1,6 @@
+projectKey=order-lifecycle
+serverUrl=http://localhost:9000
+serverVersion=10.7.0.96327
+dashboardUrl=http://localhost:9000/dashboard?id=order-lifecycle
+ceTaskId=386256fa-cb8b-4340-8959-380b5cf7866b
+ceTaskUrl=http://localhost:9000/api/ce/task?id=386256fa-cb8b-4340-8959-380b5cf7866b
