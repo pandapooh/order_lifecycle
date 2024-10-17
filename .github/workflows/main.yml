@@ -34,9 +34,10 @@ jobs:
       
       - name: Download and Install SonarQube Scanner
         run: |
-          SCANNER_VERSION="4.8.0.2856"  # Update this to the desired version
-          ZIP_FILE="sonar-scanner"
-          curl -L -o $ZIP_FILE "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/$SCANNER_VERSION/$SCANNER_DIR.zip"
+          SCANNER_VERSION="6.2.1.4610-linux-x64"
+          SCANNER_DIR=sonar-scanner-6.2.1.4610-linux-x64
+          ZIP_FILE="sonar-scanner.zip"
+          curl -L -o $ZIP_FILE "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-6.2.1.4610-linux-x64.zip?_gl=1*ryzz6o*_gcl_au*MjA1MjI0NjM2LjE3MjkyMDEwNjE.*_ga*MTcxMTgzNjkzMi4xNzI5MjAxMDYx*_ga_9JZ0GZ5TC6*MTcyOTIwMTA2MS4xLjEuMTcyOTIwMTA4My4zOC4wLjA."
 
           # Check if the download was successful
           if [ $? -ne 0 ]; then
