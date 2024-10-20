@@ -24,4 +24,4 @@ def test_create_customer(customer):
      "creditLimit": 10000.00
   }
   customer = Customer("Teams", "P928364989")
-  assert customer.create_customer(data=data) == "data"
+  assert customer.create_customer(data=data) == data
