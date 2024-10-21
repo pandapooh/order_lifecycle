@@ -101,11 +101,11 @@ jobs:
             sudo mv $SCANNER_DIR /opt/sonar-scanner
             echo "/opt/sonar-scanner/bin" >> $GITHUB_PATH
 
-        - name: Run SonarQube Scanner
-          env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          run: |
+       - name: Run SonarQube Scanner
+         env:
+           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+         run: |
             sonar-scanner \
             -Dsonar.projectKey=order-lifecycle \
             -Dsonar.sources=./ \
