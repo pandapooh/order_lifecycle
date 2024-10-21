@@ -5,11 +5,13 @@ on:
     branches:
       - main 
   pull_request:
+    types:
+      - opened
     branches:
-      - main
+      - main     
 
 jobs:
-  first:
+  theme:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,19 +21,28 @@ jobs:
       - name: Print another command
         run: echo "goodbye bitches!!"
   
-  check-unit-test:
+  test:
+    needs: theme
     runs-on: ubuntu-latest
     steps:
-        - name: Get Code
-          uses: actions/checkout@v3
+      - name: Get Code
+        uses: actions/checkout@v3
+      
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
         
-        - name: Set up python
-          uses: actions/setup-python@v4
-          with:
-            python-version: "3.8"
-          
-        - name: Installing dependencies
-          run: pip install -r requirements.txt
+      - name: Installing dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Running Unit Testing
+        run: pytest tests/test.py
+    
+  deploy: 
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploying de code
+        run: echo "Code is deploying"
         
-        - name: Running Unit Testing
-          run: pytest tests/test.py
