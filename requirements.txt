@@ -3,7 +3,6 @@ flask==3.0.3
 flask-cors
 flask_sqlalchemy
 boto3
-bson
 pyjwt
 python-dotenv
 Werkzeug
