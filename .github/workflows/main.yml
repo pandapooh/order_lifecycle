@@ -30,6 +30,7 @@ jobs:
         run: pytest tests/test.py
     
   upload: 
+    environment: dev
     needs: test
     runs-on: ubuntu-latest
     steps:
