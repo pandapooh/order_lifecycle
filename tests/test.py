@@ -30,6 +30,5 @@ def test_create_customer(customer):
     customer = Customer()
     response = json.loads(customer.create_customer(data))
 
-    print(type(response))
     assert isinstance(response, dict)
     assert isinstance(response["inserted_ids"], list)
