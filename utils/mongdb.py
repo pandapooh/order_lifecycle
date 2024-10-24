@@ -36,7 +36,7 @@ class MongoDB:
         print(tr)
         print(e.args)
 
-    def put_document(self, document) -> list:
+    def put_document(self, document) -> dict:
       try:
         with MongoClient(self.connection) as client:
           db = client[self.database]
@@ -44,8 +44,9 @@ class MongoDB:
 
           result = collection.insert_many(document)
 
-          print(result)
-          return result.inserted_ids
+          inserted_ids_dict = {'inserted_ids': [str(oid) for oid in result.inserted_ids]} 
+
+          return inserted_ids_dict
       except Exception as e:
         print(e.args)
 

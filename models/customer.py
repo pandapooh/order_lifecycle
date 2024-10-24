@@ -44,9 +44,8 @@ class Customer:
           doc.append(data)  
 
         response = self.mongo.put_document(document=doc)
-        print(type(response))
-        print(response)
-        return response
+
+        return json.dumps(response)
     except Exception as e:
       print(f"Error creating customer {e}")
 
