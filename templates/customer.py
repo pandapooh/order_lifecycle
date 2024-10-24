@@ -7,12 +7,19 @@ customer = Blueprint('customer', __name__, template_folder='templates')
   Customer flow
   Get, Create, Update
 '''
+@customer.route('/customer', methods=['GET'])
+def get_all_customer():
+  print("saca el customer")
+  customer = Customer()
+  resp = customer.get_customer()
+  return resp
+
 @customer.route('/customer/<customerid>', methods=['GET'])
 def get_customer(customerid):
   print("saca el customer")
   customer = Customer(customerId=customerid)
   resp = customer.get_customer()
-  return jsonify(resp)
+  return resp
 
 @customer.route('/customer', methods=['POST'])
 def create_customer():
@@ -20,7 +27,7 @@ def create_customer():
   data = request.get_json()
   customer = Customer()
   resp = customer.create_customer(data=data)
-  return jsonify(resp)
+  return resp
 
 @customer.route('/customer/<customerid>', methods=['PATCH'])
 def update_customer(customerid):

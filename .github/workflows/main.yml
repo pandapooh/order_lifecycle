@@ -12,18 +12,7 @@ on:
       - main     
 
 jobs:
-  theme:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Echo something
-        run: echo "output message!!"
-
-      - name: Print another command
-        run: echo "goodbye bitches!!"
-  
   test:
-    needs: theme
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
@@ -40,76 +29,92 @@ jobs:
       - name: Running Unit Testing
         run: pytest tests/test.py
     
-  deploy: 
+  upload: 
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Deploying de code
-        run: echo "Code is deploying"
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/order-lifecycle-test:latest .
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/order-lifecycle-test:latest
   
-  sonar:
-     runs-on: ubuntu-latest
+  # sonar:
+  #     runs-on: ubuntu-latest
+  
+  #     steps:
+  #       - name: Checkout code
+  #         uses: actions/checkout@v3
 
-     steps:
-       - name: Checkout code
-         uses: actions/checkout@v3
+  #       - name: Set up JDK
+  #         uses: actions/setup-java@v1
+  #         with:
+  #           java-version: '11'
 
-       - name: Set up JDK
-         uses: actions/setup-java@v1
-         with:
-           java-version: '11'
+  #       - name: Cache SonarQube packages
+  #         uses: actions/cache@v2
+  #         with:
+  #           path: ~/.sonar/cache
+  #           key: ${{ runner.os }}-sonar-${{ hashFiles('**/*.java') }}
+  #           restore-keys: |
+  #             ${{ runner.os }}-sonar-
 
-       - name: Cache SonarQube packages
-         uses: actions/cache@v2
-         with:
-           path: ~/.sonar/cache
-           key: ${{ runner.os }}-sonar-${{ hashFiles('**/*.java') }}
-           restore-keys: |
-             ${{ runner.os }}-sonar-
+  #       - name: Install unzip
+  #         run: sudo apt-get install -y unzip
+        
+  #       - name: Download and Install SonarQube Scanner
+  #         run: |
+  #             SCANNER_VERSION="6.2.1.4610-linux-x64"
+  #             SCANNER_DIR=sonar-scanner-6.2.1.4610-linux-x64
+  #             ZIP_FILE="sonar-scanner.zip"
+  #             curl -L -o $ZIP_FILE "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-6.2.1.4610-linux-x64.zip?_gl=1*ryzz6o*_gcl_au*MjA1MjI0NjM2LjE3MjkyMDEwNjE.*_ga*MTcxMTgzNjkzMi4xNzI5MjAxMDYx*_ga_9JZ0GZ5TC6*MTcyOTIwMTA2MS4xLjEuMTcyOTIwMTA4My4zOC4wLjA."
 
-       - name: Install unzip
-         run: sudo apt-get install -y unzip
-      
-       - name: Download and Install SonarQube Scanner
-         run: |
-            SCANNER_VERSION="6.2.1.4610-linux-x64"
-            SCANNER_DIR=sonar-scanner-6.2.1.4610-linux-x64
-            ZIP_FILE="sonar-scanner.zip"
-            curl -L -o $ZIP_FILE "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-6.2.1.4610-linux-x64.zip?_gl=1*ryzz6o*_gcl_au*MjA1MjI0NjM2LjE3MjkyMDEwNjE.*_ga*MTcxMTgzNjkzMi4xNzI5MjAxMDYx*_ga_9JZ0GZ5TC6*MTcyOTIwMTA2MS4xLjEuMTcyOTIwMTA4My4zOC4wLjA."
+  #             # Check if the download was successful
+  #             if [ $? -ne 0 ]; then
+  #               echo "Failed to download SonarQube Scanner."
+  #               exit 1
+  #             fi
 
-            # Check if the download was successful
-            if [ $? -ne 0 ]; then
-              echo "Failed to download SonarQube Scanner."
-              exit 1
-            fi
+  #             # Verify the downloaded file exists and is not empty
+  #             if [ ! -s sonar-scanner.zip ]; then
+  #               echo "Downloaded file is empty or does not exist."
+  #               exit 1
+  #             fi
 
-            # Verify the downloaded file exists and is not empty
-            if [ ! -s sonar-scanner.zip ]; then
-              echo "Downloaded file is empty or does not exist."
-              exit 1
-            fi
+  #             # Unzip the downloaded file
+  #             unzip sonar-scanner.zip
 
-            # Unzip the downloaded file
-            unzip sonar-scanner.zip
+  #             # Check if unzip was successful
+  #             if [ $? -ne 0 ]; then
+  #               echo "Failed to unzip SonarQube Scanner."
+  #               exit 1
+  #             fi
 
-            # Check if unzip was successful
-            if [ $? -ne 0 ]; then
-              echo "Failed to unzip SonarQube Scanner."
-              exit 1
-            fi
+  #             # Move the scanner to a proper directory and add to PATH
+  #             sudo mv $SCANNER_DIR /opt/sonar-scanner
+  #             echo "/opt/sonar-scanner/bin" >> $GITHUB_PATH
 
-            # Move the scanner to a proper directory and add to PATH
-            sudo mv $SCANNER_DIR /opt/sonar-scanner
-            echo "/opt/sonar-scanner/bin" >> $GITHUB_PATH
-
-       - name: Run SonarQube Scanner
-         env:
-           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-         run: |
-            sonar-scanner \
-            -Dsonar.projectKey=order-lifecycle \
-            -Dsonar.sources=./ \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.login=$SONAR_TOKEN
-          
+  #       - name: Run SonarQube Scanner
+  #         env:
+  #           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+  #         run: |
+  #             sonar-scanner \
+  #             -Dsonar.projectKey=order-lifecycle \
+  #             -Dsonar.sources=./ \
+  #             -Dsonar.host.url=$SONAR_HOST_URL \
+  #             -Dsonar.login=$SONAR_TOKEN

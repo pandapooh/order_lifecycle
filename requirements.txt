@@ -13,3 +13,5 @@ uuid
 pandas
 pytest 
 pytest-cov
+flask-appbuilder
+pymongo
